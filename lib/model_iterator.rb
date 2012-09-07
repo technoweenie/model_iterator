@@ -10,6 +10,11 @@ class ModelIterator
     end
   end
 
+  class << self
+    # Gets or sets a default Redis client object for iterators.
+    attr_accessor :redis
+  end
+
   # Gets a reference to the ActiveRecord::Base class that is iterated.
   #
   # Returns a Class.
@@ -51,7 +56,7 @@ class ModelIterator
   # iterating.  This is set automatically by #each.
   attr_accessor :job
 
-  # Gets or Sets the Redis client object.
+  # Gets or sets the Redis client object.
   attr_accessor :redis
 
   # Initializes a ModelIterator instance.
@@ -89,7 +94,7 @@ class ModelIterator
     else
       {}
     end
-    @redis = @options[:redis]
+    @redis = @options[:redis] || self.class.redis
     @id_field = @options[:id_field] || klass.primary_key
     @id_clause = @options[:id_clause] || "#{klass.table_name}.#{@id_field}"
     @order = @options[:order] == :desc ? :desc : :asc

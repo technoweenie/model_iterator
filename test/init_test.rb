@@ -28,8 +28,13 @@ end
 
 class InitializationTestWithOptions < ModelIterator::TestCase
   def setup
-    @iter = ModelIterator.new Model, :redis => RedisClient.new,
+    ModelIterator.redis = @redis = RedisClient.new
+    @iter = ModelIterator.new Model,
       :start_id => 5, :limit => 10, :prefix => 'foo'
+  end
+
+  def teardown
+    ModelIterator.redis = nil
   end
 
   def test_sets_klass
@@ -50,6 +55,10 @@ class InitializationTestWithOptions < ModelIterator::TestCase
 
   def test_sets_redis_prefix
     assert_equal 'foo:ModelIterator:ModelIterator::TestCase::Model', @iter.prefix
+  end
+
+  def test_sets_default_redis
+    assert_equal @redis, @iter.redis
   end
 end
 
