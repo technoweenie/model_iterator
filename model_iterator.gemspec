@@ -40,7 +40,15 @@ Gem::Specification.new do |s|
   ## THE MANIFEST COMMENTS, they are used as delimiters by the task.
   # = MANIFEST =
   s.files = %w[
-
+    Gemfile
+    LICENSE.md
+    README.md
+    Rakefile
+    lib/model_iterator.rb
+    model_iterator.gemspec
+    test/helper.rb
+    test/init_test.rb
+    test/iterate_test.rb
   ]
   # = MANIFEST =
 
