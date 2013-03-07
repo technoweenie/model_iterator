@@ -4,17 +4,21 @@ Basic library for iterating through large ActiveRecord datasets.  For instance,
 let's say you add a new feature, and you need to backfill data for existing
 records:
 
-    iter = ModelIterator.new(User, :redis => $redis)
-    iter.each do |user|
-      backfill(user)
-    end
+```ruby
+iter = ModelIterator.new(User, :redis => $redis)
+iter.each do |user|
+  backfill(user)
+end
+```
 
 ModelIterator selects the records in batches (100 by default), and loops
 through the table filtering based on the ID.
 
-    SELECT * FROM users WHERE id > 0 LIMIT 100
-    SELECT * FROM users WHERE id > 100 LIMIT 100
-    SELECT * FROM users WHERE id > 200 LIMIT 100
+```sql
+SELECT * FROM users WHERE id > 0 LIMIT 100
+SELECT * FROM users WHERE id > 100 LIMIT 100
+SELECT * FROM users WHERE id > 200 LIMIT 100
+```
 
 Each record's ID is tracked in Redis immediately after being processed.  If
 jobs crash, you can fix code, and re-run from where you left off.
