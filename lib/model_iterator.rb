@@ -105,8 +105,9 @@ class ModelIterator
     @joins = @options[:joins]
     @clause =  "#{@id_clause} #{op} ?"
     if @options[:conditions]
-      @clause += " AND (#{@options[:conditions].first})"
-      @clause_args = @options[:conditions][1..-1]
+      conditions = Array(@options[:conditions])
+      @clause += " AND (#{conditions.first})"
+      @clause_args = conditions[1..-1]
     elsif !args.empty?
       @clause += " AND (#{args.shift})"
       @clause_args = args
