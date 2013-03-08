@@ -83,6 +83,8 @@ class ModelIterator
   #                        at a time.
   #           :limit     - Fixnum limit of objects to fetch from the db.
   #                        Default: 100
+  #           :conditions - Array of String SQL WHERE clause and optional values
+  #                         (Will override clause/values given in arguments.)
   #
   #   ModelIterator.new(Repository, :start_id => 5000)
   #   ModelIterator.new(Repository, 'public=?', true, :start_id => 1000)
@@ -101,10 +103,15 @@ class ModelIterator
     op = @order == :asc ? '>' : '<'
     @max = @options[:max].to_i
     @joins = @options[:joins]
-    @clause = args.empty? ?
-      "#{@id_clause} #{op} ?" :
-      "#{@id_clause} #{op} ? AND (#{args.shift})"
-    @clause_args = args
+    @clause =  "#{@id_clause} #{op} ?"
+    if @options[:conditions]
+      conditions = Array(@options[:conditions])
+      @clause += " AND (#{conditions.first})"
+      @clause_args = conditions[1..-1]
+    elsif !args.empty?
+      @clause += " AND (#{args.shift})"
+      @clause_args = args
+    end
     @current_id = @options[:start_id]
     @limit = @options[:limit] || 100
     @job = @prefix = @key = nil
