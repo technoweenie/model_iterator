@@ -27,6 +27,18 @@ class IterateTest < ModelIterator::TestCase
     assert_equal %w(b c), names
   end
 
+  def test_loops_through_filtered_records_from_options
+    names = []
+    iter = ModelIterator.new Model,
+      :redis => RedisClient.new, :limit => 1,
+      :conditions => ['name != ?', 'a']
+    iter.each do |m|
+      names << m.name
+    end
+
+    assert_equal %w(b c), names
+  end
+
   def test_loops_through_records_in_reverse
     names = []
     iter = ModelIterator.new Model, :redis => RedisClient.new, :limit => 1,
