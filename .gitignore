@@ -2,3 +2,4 @@
 bin
 pkg
 Gemfile.lock
+vendor
