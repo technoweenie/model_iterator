@@ -104,14 +104,13 @@ class ModelIterator
     @max = @options[:max].to_i
     @joins = @options[:joins]
     @clause =  "#{@id_clause} #{op} ?"
-    if @options[:conditions]
-      conditions = Array(@options[:conditions])
-      @clause += " AND (#{conditions.first})"
-      @clause_args = conditions[1..-1]
-    elsif !args.empty?
-      @clause += " AND (#{args.shift})"
-      @clause_args = args
+
+    if !(conditions = Array(@options[:conditions] || args)).empty?
+      @clause += " AND (#{conditions.shift})"
     end
+
+    @clause_args = conditions
+
     @current_id = @options[:start_id]
     @limit = @options[:limit] || 100
     @job = @prefix = @key = nil
