@@ -32,7 +32,7 @@ class IterateTest < ModelIterator::TestCase
     assert_equal 3, iter.current_id
   end
 
-  def test_loops_through_all_sets
+  def test_loops_through_all_sets_with_null_redis
     names = []
     redis = ModelIterator::NullRedis.new
     iter = ModelIterator.new Model, :redis => redis, :limit => 1
