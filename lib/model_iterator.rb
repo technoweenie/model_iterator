@@ -1,6 +1,6 @@
 # Iterates over large models, storing state in Redis.
 class ModelIterator
-  VERSION = "1.0.3"
+  VERSION = "1.0.4"
 
   class MaxIterations < StandardError
     attr_reader :iterator
