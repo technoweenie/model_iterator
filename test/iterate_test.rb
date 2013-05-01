@@ -8,12 +8,43 @@ class IterateTest < ModelIterator::TestCase
 
   def test_loops_through_all_records
     names = []
-    iter = ModelIterator.new Model, :redis => RedisClient.new, :limit => 1
+    redis = RedisClient.new
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1
     iter.each do |m|
       names << m.name
     end
 
     assert_equal %w(a b c), names
+  end
+
+  def test_loops_through_all_sets
+    names = []
+    redis = RedisClient.new
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1
+    iter.each_set do |records|
+      names << records.map(&:name)
+      iter.update_current_id(records.last)
+    end
+
+    assert_equal [%w(a), %w(b), %w(c)], names
+
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1
+    assert_equal 3, iter.current_id
+  end
+
+  def test_loops_through_all_sets
+    names = []
+    redis = ModelIterator::NullRedis.new
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1
+    iter.each_set do |records|
+      names << records.map(&:name)
+      iter.update_current_id(records.last)
+    end
+
+    assert_equal [%w(a), %w(b), %w(c)], names
+
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1
+    assert_equal 0, iter.current_id
   end
 
   def test_loops_through_filtered_records

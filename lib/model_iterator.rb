@@ -144,7 +144,7 @@ class ModelIterator
     each_set do |records|
       records.each do |record|
         block.call(record)
-        @current_id = record.send(@id_field)
+        update_current_id(record)
       end
     end
     cleanup
@@ -220,6 +220,33 @@ class ModelIterator
     opt[:joins] = @joins if @joins
     opt
   end
-end
 
+  # Updates the current ID for the given record.
+  #
+  # record - A single record from the iteration.
+  #
+  # Returns nothing.
+  def update_current_id(record)
+    @current_id = record.send(@id_field)
+  end
+
+  # Pass this to ModelIterator if you don't want to store state anywhere.
+  class NullRedis
+    @instance = new
+
+    def self.new
+      @instance
+    end
+
+    def get(key)
+      0
+    end
+
+    def set(key, value)
+    end
+
+    def del(key)
+    end
+  end
+end
 
