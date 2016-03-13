@@ -204,7 +204,11 @@ class ModelIterator
   # Returns an Array of ActiveRecord::Base instances if any results are
   # returned, or nil.
   def records
-    arr = @klass.all(find_options)
+    options = find_options
+    query = @klass.where(options[:conditions]).limit(options[:limit]).order(options[:order])
+    query.select(options[:select]) if options[:select]
+    query.joins(options[:joins]) if options[:joins]
+    arr = query.to_a
     arr.empty? ? nil : arr
   end
 
