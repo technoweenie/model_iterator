@@ -75,7 +75,6 @@ class ModelIterator
   #                        the ID field.  Default: "table_name.id"
   #           :start_id  - Fixnum to start iterating from.  Default: 1
   #           :prefix    - Custom String prefix for redis keys.
-  #           :select    - Optional String of the columns to retrieve.
   #           :joins     - Optional Symbol or Hash :joins option for 
   #                        ActiveRecord::Base.find.
   #           :max       - Optional Fixnum of the maximum number of iterations.
@@ -206,7 +205,6 @@ class ModelIterator
   def records
     options = find_options
     query = @klass.where(options[:conditions]).limit(options[:limit]).order(options[:order])
-    query.select(options[:select]) if options[:select]
     query.joins(options[:joins]) if options[:joins]
     arr = query.to_a
     arr.empty? ? nil : arr
@@ -217,9 +215,6 @@ class ModelIterator
   # Returns a Hash.
   def find_options
     opt = {:conditions => conditions, :limit => @limit, :order => "#{@id_clause} #{@order}"}
-    if columns = @options[:select]
-      opt[:select] = columns
-    end
     opt[:joins] = @joins if @joins
     opt
   end
