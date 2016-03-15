@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
   ## require 'NAME.rb' or'/lib/NAME/file.rb' can be as require 'NAME/file.rb'
   s.require_paths = %w[lib]
 
+  s.add_dependency 'activerecord', '>=4.0'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'test-unit'
 
