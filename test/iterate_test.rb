@@ -142,6 +142,14 @@ class IterateTest < ModelIterator::TestCase
     end
   end
 
+  def test_joins_can_be_used
+    redis = RedisClient.new
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1, :joins => :associated_model
+    iter.each do |m|
+      assert_not_nil m.associated_model
+    end
+  end
+
   class ExpectedError < StandardError; end
 end
 
