@@ -133,6 +133,15 @@ class IterateTest < ModelIterator::TestCase
     assert_equal %w(a b c), names
   end
 
+  def test_select_option_honored
+    names = []
+    redis = RedisClient.new
+    iter = ModelIterator.new Model, :redis => redis, :limit => 1, :select => :id
+    iter.each do |m|
+      assert_false m.attributes.has_key?(:name)
+    end
+  end
+
   class ExpectedError < StandardError; end
 end
 
