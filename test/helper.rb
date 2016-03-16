@@ -29,8 +29,6 @@ class ModelIterator::TestCase < Test::Unit::TestCase
     end
   end
 
-  puts AssociatedModel.table_name
-
   class RedisClient
     def initialize(hash = nil)
       @hash = hash || {}
