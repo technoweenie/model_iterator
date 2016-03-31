@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   ## the sub! line in the Rakefile
   s.name              = 'model_iterator'
   s.version           = '2.0.0'
-  s.date              = '2016-03-30'
+  s.date              = '2016-03-31'
   s.rubyforge_project = 'model_iterator'
 
   ## Make sure your summary is short. The description may be as long
